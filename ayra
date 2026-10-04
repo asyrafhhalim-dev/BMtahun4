@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Pembelajaran UASA Bahasa Melayu Tahun 4</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .tabs {
+            display: flex;
+            background: var(--light);
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #555;
+            min-width: 150px;
+        }
+        .tab-btn:hover { background: #dfe6e9; }
+        .tab-btn.active {
+            background: white;
+            color: var(--secondary);
+            border-bottom: 3px solid var(--secondary);
+        }
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        .tab-content.active { display: block; }
+        
+        .question-card {
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            border-left: 5px solid var(--secondary);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .options { list-style: none; padding: 0; }
+        .options li { margin: 10px 0; }
+        .options label { cursor: pointer; display: flex; align-items: center; }
+        .options input { margin-right: 10px; }
+        
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            margin: 20px auto;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #2980b9; }
+        
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f4f8;
+            border-left: 4px solid var(--secondary);
+            font-size: 0.9em;
+        }
+        .correct-text { color: var(--success); font-weight: bold; }
+        .wrong-text { color: var(--danger); font-weight: bold; }
+
+        .reading-text {
+            background: #fffbe6;
+            padding: 15px;
+            border: 1px dashed #ccc;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        /* Canvas Styles */
+        .canvas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        canvas {
+            border: 2px solid var(--primary);
+            border-radius: 5px;
+            background: white;
+            cursor: crosshair;
+        }
+        .tools { margin-bottom: 15px; }
+        .tools button {
+            padding: 8px 15px; margin: 0 5px; cursor: pointer;
+            background: #ecf0f1; border: 1px solid #bdc3c7; border-radius: 4px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Portal Pembelajaran Interaktif UASA</h1>
+    <p>Bahasa Melayu Tahun 4 - Latihan, Simulasi & Analisis</p>
+</header>
+
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('kertas1')">Kertas Model 1</button>
+        <button class="tab-btn" onclick="openTab('setA')">Set Latihan A</button>
+        <button class="tab-btn" onclick="openTab('setB')">Set Latihan B</button>
+        <button class="tab-btn" onclick="openTab('simulasi')">Simulasi Interaktif</button>
+        <button class="tab-btn" onclick="openTab('lukisan')">Kanvas Nota</button>
+        <button class="tab-btn" onclick="openTab('laporan')">Laporan Prestasi</button>
+    </div>
+
+    <!-- TAB 1: KERTAS MODEL 1 (RECREATION) -->
+    <div id="kertas1" class="tab-content active">
+        <h2>Bahagian A: Soalan Objektif</h2>
+        <form id="formKertas1">
+            <div class="question-card">
+                <p><strong>1.</strong> Adik leka melihat itik-itik sedang ________ makanan di halaman rumah nenek.</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q1" value="A"> A. mematuk</label></li>
+                    <li><label><input type="radio" name="q1" value="B"> B. menyudu</label></li>
+                    <li><label><input type="radio" name="q1" value="C"> C. memagut</label></li>
+                    <li><label><input type="radio" name="q1" value="D"> D. menggigit</label></li>
+                </ul>
+                <div class="explanation" id="exp-q1">
+                    <span class="correct-text">Jawapan: B. menyudu</span><br>
+                    Penerangan: Pergerakan itik mengambil makanan menggunakan paruhnya yang leper dipanggil 'menyudu'. Ayam pula 'mematuk'.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>2.</strong> "Jarak perjalanan dari sini ke ________ kira-kira 100 kilometer," kata Amirul kepada Johan.</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q2" value="A"> A. ini</label></li>
+                    <li><label><input type="radio" name="q2" value="B"> B. itu</label></li>
+                    <li><label><input type="radio" name="q2" value="C"> C. situ</label></li>
+                    <li><label><input type="radio" name="q2" value="D"> D. sana</label></li>
+                </ul>
+                <div class="explanation" id="exp-q2">
+                    <span class="correct-text">Jawapan: D. sana</span><br>
+                    Penerangan: 'Sana' merujuk kepada tempat yang jauh dari penutur dan pendengar.
+                </div>
+            </div>
+
+            <div class="reading-text">
+                <strong>Baca petikan di bawah:</strong><br>
+                Pada petang itu, Naufal menyiapkan kerja sekolahnya lebih awal daripada biasa. Dia mahu cepat pergi ke dusun datuknya kerana sudah berjanji untuk membantu datuknya mengait buah rambutan. Ketika dia mula mengayuh basikalnya, dia mendapati ada sesuatu yang tidak kena. Rupa-rupanya, tayar basikalnya bocor. Dia mengeluarkan tayar dan tiub daripada rim dengan menggunakan pengumpil tayar...
+            </div>
+
+            <div class="question-card">
+                <p><strong>3.</strong> Apakah tujuan Naufal mahu ke dusun datuknya?</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q3" value="A"> A. Mengait buah rambutan</label></li>
+                    <li><label><input type="radio" name="q3" value="B"> B. Mengutip buah rambutan</label></li>
+                    <li><label><input type="radio" name="q3" value="C"> C. Membaiki tayar basikalnya</label></li>
+                </ul>
+                <div class="explanation" id="exp-q3">
+                    <span class="correct-text">Jawapan: A. Mengait buah rambutan</span><br>
+                    Penerangan: Dinyatakan dengan jelas dalam petikan: "membantu datuknya mengait buah rambutan".
+                </div>
+            </div>
+
+            <hr>
+            <h2>Bahagian B: Pemahaman Subjektif</h2>
+            <div class="question-card">
+                <p><strong>Petikan:</strong> "Adi, jangan bermain di tepi jalan raya," tegur Amar sambil menarik lengan adiknya itu. Amar tidak boleh membiarkan adiknya terus bermain di kawasan itu kerana bimbang akan keselamatannya.</p>
+                <p><strong>4 (a).</strong> Mengapakah Amar melarang Adi bermain papan selaju di kawasan itu?</p>
+                <textarea id="sub1_a" rows="3" placeholder="Tulis jawapan anda di sini..."></textarea>
+                <div class="explanation" id="exp-sub1">
+                    <span class="correct-text">Skema Jawapan:</span><br>
+                    Amar melarang Adi kerana kawasan tepi jalan raya sangat berbahaya dan boleh membahayakan keselamatan serta mengundang kemalangan.
+                </div>
+            </div>
+
+            <button type="button" class="btn" onclick="semakKertas('formKertas1', 'kertas1')">Semak Jawapan Kertas 1</button>
+        </form>
+    </div>
+
+    <!-- TAB 2: SET A -->
+    <div id="setA" class="tab-content">
+        <h2>Set Latihan A: Sistem Bahasa & Tatabahasa</h2>
+        <form id="formSetA">
+            <div class="question-card">
+                <p><strong>1.</strong> ________ yang mencadangkan agar pondok bacaan itu didirikan di taman sains?</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="sa1" value="A"> A. Apakah</label></li>
+                    <li><label><input type="radio" name="sa1" value="B"> B. Siapakah</label></li>
+                    <li><label><input type="radio" name="sa1" value="C"> C. Mengapakah</label></li>
+                </ul>
+                <div class="explanation" id="exp-sa1">
+                    <span class="correct-text">Jawapan: B. Siapakah</span><br>
+                    Penerangan: Kata tanya 'Siapakah' digunakan untuk menanyakan orang.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>2.</strong> Pak Cik Hamid menggunakan se________ parang yang tajam untuk menebas semak-samun.</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="sa2" value="A"> A. bilah</label></li>
+                    <li><label><input type="radio" name="sa2" value="B"> B. batang</label></li>
+                    <li><label><input type="radio" name="sa2" value="C"> C. pucuk</label></li>
+                </ul>
+                <div class="explanation" id="exp-sa2">
+                    <span class="correct-text">Jawapan: A. bilah</span><br>
+                    Penerangan: Penjodoh bilangan untuk benda tajam dan runcing seperti parang, pisau, dan keris ialah 'bilah'.
+                </div>
+            </div>
+            
+            <button type="button" class="btn" onclick="semakKertas('formSetA', 'setA')">Semak Jawapan Set A</button>
+        </form>
+    </div>
+
+    <!-- TAB 3: SET B -->
+    <div id="setB" class="tab-content">
+        <h2>Set Latihan B: Kata Hubung & Kata Adjektif</h2>
+        <form id="formSetB">
+            <div class="question-card">
+                <p><strong>1.</strong> Suasana di pasar malam itu sungguh ________ kerana dikunjungi ramai orang.</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="sb1" value="A"> A. sunyi</label></li>
+                    <li><label><input type="radio" name="sb1" value="B"> B. riuh</label></li>
+                    <li><label><input type="radio" name="sb1" value="C"> C. damai</label></li>
+                </ul>
+                <div class="explanation" id="exp-sb1">
+                    <span class="correct-text">Jawapan: B. riuh</span><br>
+                    Penerangan: Kata adjektif 'riuh' paling sesuai menggambarkan keadaan bising dan sibuk di pasar malam.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>2.</strong> Aminah mencuci tangannya dengan sabun ________ bersih sebelum makan.</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="sb2" value="A"> A. hingga</label></li>
+                    <li><label><input type="radio" name="sb2" value="B"> B. lalu</label></li>
+                    <li><label><input type="radio" name="sb2" value="C"> C. kerana</label></li>
+                </ul>
+                <div class="explanation" id="exp-sb2">
+                    <span class="correct-text">Jawapan: A. hingga</span><br>
+                    Penerangan: Kata hubung 'hingga' menunjukkan had masa atau pencapaian (sehingga tangannya bersih).
+                </div>
+            </div>
+            
+            <button type="button" class="btn" onclick="semakKertas('formSetB', 'setB')">Semak Jawapan Set B</button>
+        </form>
+    </div>
+
+    <!-- TAB 4: SIMULASI CANVAS -->
+    <div id="simulasi" class="tab-content">
+        <h2>Simulasi Interaktif: Kad Penjodoh Bilangan</h2>
+        <p>Klik pada kotak di bawah untuk membalikkan kad imbasan dan mempelajari penjodoh bilangan.</p>
+        <div class="canvas-container">
+            <canvas id="simulasiCanvas" width="600" height="300"></canvas>
+        </div>
+    </div>
+
+    <!-- TAB 5: KANVAS LUKISAN -->
+    <div id="lukisan" class="tab-content">
+        <h2>Kanvas Nota & Conteng</h2>
+        <p>Gunakan kanvas ini untuk melukis, membuat peta minda atau mencatat nota.</p>
+        <div class="canvas-container">
+            <div class="tools">
+                <button onclick="changeColor('black')">Hitam</button>
+                <button onclick="changeColor('red')">Merah</button>
+                <button onclick="changeColor('blue')">Biru</button>
+                <button onclick="clearCanvas()">Padam Semua (Clear)</button>
+            </div>
+            <canvas id="drawCanvas" width="700" height="400"></canvas>
+        </div>
+    </div>
+
+    <!-- TAB 6: LAPORAN PRESTASI -->
+    <div id="laporan" class="tab-content">
+        <h2>Carta Prestasi Markah Ujian</h2>
+        <p>Carta dinamik ini menunjukkan skor yang anda peroleh daripada set latihan di atas.</p>
+        <div class="canvas-container">
+            <canvas id="chartCanvas" width="600" height="400"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Global Scores
+    let scores = {
+        'Kertas 1': 0,
+        'Set A': 0,
+        'Set B': 0
+    };
+
+    // Tab Navigation Logic
+    function openTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabName).classList.add('active');
+        event.currentTarget.classList.add('active');
+
+        if(tabName === 'laporan') drawChart();
+        if(tabName === 'simulasi') drawSimulasi();
+    }
+
+    // Quiz Checking Logic
+    const answers = {
+        'q1': 'B', 'q2': 'D', 'q3': 'A',
+        'sa1': 'B', 'sa2': 'A',
+        'sb1': 'B', 'sb2': 'A'
+    };
+
+    function semakKertas(formId, tabId) {
+        let form = document.getElementById(formId);
+        let formData = new FormData(form);
+        let correctCount = 0;
+        let totalObj = 0;
+
+        for (let key in answers) {
+            if (form.elements[key]) {
+                totalObj++;
+                let explanations = document.getElementById(`exp-${key}`);
+                if (explanations) explanations.style.display = 'block';
+
+                if (formData.get(key) === answers[key]) {
+                    correctCount++;
+                }
+            }
+        }
+
+        // Show subjective explanations for Kertas 1
+        if (formId === 'formKertas1') {
+            document.getElementById('exp-sub1').style.display = 'block';
+        }
+
+        // Update scores
+        if (formId === 'formKertas1') scores['Kertas 1'] = (correctCount / 3) * 100;
+        if (formId === 'formSetA') scores['Set A'] = (correctCount / 2) * 100;
+        if (formId === 'formSetB') scores['Set B'] = (correctCount / 2) * 100;
+
+        alert(`Latihan disemak! Sila lihat penerangan di bawah setiap soalan.\nSila semak tab Laporan Prestasi untuk melihat graf anda.`);
+    }
+
+    // Charting Logic (Pure Canvas)
+    function drawChart() {
+        const canvas = document.getElementById('chartCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const labels = Object.keys(scores);
+        const data = Object.values(scores);
+        
+        const barWidth = 80;
+        const spacing = 100;
+        const startX = 100;
+        const bottomY = 350;
+        const maxBarHeight = 250;
+
+        // Draw axes
+        ctx.beginPath();
+        ctx.moveTo(50, 50);
+        ctx.lineTo(50, bottomY);
+        ctx.lineTo(550, bottomY);
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Draw Y-axis labels
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#333';
+        ctx.textAlign = 'right';
+        for(let i=0; i<=5; i++) {
+            let y = bottomY - (i * 50);
+            ctx.fillText(i * 20 + "%", 40, y + 5);
+        }
+
+        // Draw Bars
+        for(let i=0; i<labels.length; i++) {
+            let x = startX + (i * spacing);
+            let barHeight = (data[i] / 100) * maxBarHeight;
+            let y = bottomY - barHeight;
+
+            // Bar color
+            ctx.fillStyle = '#3498db';
+            ctx.fillRect(x, y, barWidth, barHeight);
+            
+            // Text Label
+            ctx.fillStyle = '#333';
+            ctx.textAlign = 'center';
+            ctx.fillText(labels[i], x + barWidth/2, bottomY + 25);
+            ctx.fillText(data[i].toFixed(0) + "%", x + barWidth/2, y - 10);
+        }
+    }
+
+    // Interactive Simulation (Flashcards Canvas)
+    const cards = [
+        {x: 50, y: 50, w: 200, h: 200, term: "Sebatang", def: "Sungai, Pensel, Pokok", flipped: false},
+        {x: 350, y: 50, w: 200, h: 200, term: "Sebentuk", def: "Cincin, Mata Kail", flipped: false}
+    ];
+    let simCanvas, simCtx;
+
+    function drawSimulasi() {
+        simCanvas = document.getElementById('simulasiCanvas');
+        simCtx = simCanvas.getContext('2d');
+        
+        simCanvas.addEventListener('mousedown', function(e) {
+            const rect = simCanvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            cards.forEach(card => {
+                if (clickX >= card.x && clickX <= card.x + card.w &&
+                    clickY >= card.y && clickY <= card.y + card.h) {
+                    card.flipped = !card.flipped;
+                    renderCards();
+                }
+            });
+        });
+        renderCards();
+    }
+
+    function renderCards() {
+        simCtx.clearRect(0, 0, simCanvas.width, simCanvas.height);
+        simCtx.font = "bold 20px Arial";
+        simCtx.textAlign = "center";
+        simCtx.textBaseline = "middle";
+
+        cards.forEach(card => {
+            // Draw card shadow
+            simCtx.fillStyle = "rgba(0,0,0,0.1)";
+            simCtx.fillRect(card.x + 5, card.y + 5, card.w, card.h);
+            
+            // Draw card base
+            simCtx.fillStyle = card.flipped ? "#e8f4f8" : "#f39c12";
+            simCtx.fillRect(card.x, card.y, card.w, card.h);
+            
+            simCtx.strokeStyle = "#d35400";
+            simCtx.lineWidth = 2;
+            simCtx.strokeRect(card.x, card.y, card.w, card.h);
+
+            // Draw text
+            simCtx.fillStyle = card.flipped ? "#2c3e50" : "#fff";
+            let text = card.flipped ? card.def : card.term;
+            
+            // Simple word wrap simulation
+            let words = text.split(', ');
+            if(card.flipped) {
+                for(let i=0; i<words.length; i++) {
+                    simCtx.fillText(words[i], card.x + card.w/2, card.y + (card.h/2) - 20 + (i*30));
+                }
+            } else {
+                simCtx.fillText(text, card.x + card.w/2, card.y + card.h/2);
+            }
+        });
+    }
+
+    // Drawing Canvas Logic
+    const drawCv = document.getElementById('drawCanvas');
+    const dCtx = drawCv.getContext('2d');
+    let painting = false;
+    let currentColor = 'black';
+
+    drawCv.addEventListener('mousedown', startPosition);
+    drawCv.addEventListener('mouseup', endPosition);
+    drawCv.addEventListener('mousemove', draw);
+
+    function startPosition(e) {
+        painting = true;
+        draw(e);
+    }
+    function endPosition() {
+        painting = false;
+        dCtx.beginPath();
+    }
+    function draw(e) {
+        if (!painting) return;
+        const rect = drawCv.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        dCtx.lineWidth = 3;
+        dCtx.lineCap = 'round';
+        dCtx.strokeStyle = currentColor;
+
+        dCtx.lineTo(x, y);
+        dCtx.stroke();
+        dCtx.beginPath();
+        dCtx.moveTo(x, y);
+    }
+    function changeColor(color) {
+        currentColor = color;
+    }
+    function clearCanvas() {
+        dCtx.clearRect(0, 0, drawCv.width, drawCv.height);
+    }
+
+    // Initialize initial canvas layout
+    drawSimulasi();
+</script>
+
+</body>
+</html>
